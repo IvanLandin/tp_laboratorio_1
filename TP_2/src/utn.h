@@ -42,7 +42,7 @@ int myGets(char* cadena, int len);
 /// \param limiteSuperior
 /// \param reintentos
 /// \return
-float utn_getNumeroDecimal(float* pResultado, char* mensaje, char* mensajeError, float limiteInferior, float limiteSuperior, int reintentos);
+int utn_getNumeroDecimal(float* pResultado, char* mensaje, char* mensajeError, float limiteInferior, float limiteSuperior, int reintentos);
 
 /// \fn int getFloat(float*)
 /// \brief
@@ -89,4 +89,6 @@ int utn_getTexto(char* pResultado, char mensaje[], char mensajeError[], int limi
 /// \brief
 /// \param cadena
 /// \return
-int getString(char* cadena);
+int getString(char* cadena, int len);
+
+int getAlNum(char* cadena, int len);

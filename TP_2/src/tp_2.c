@@ -28,7 +28,9 @@ Landín Ivan Lautaro. Div C
 #include <unistd.h>
 #include "utn.h"
 #include "arrayPassenger.h"
-#include "procesoDeStrings.h"
+#include "passengerType.h"
+#include "flightStatus.h"
+#include "menu.h"
 
 #define LEN 2000
 
@@ -79,11 +81,14 @@ int main(void)
 					case 2:
 						if(banderaAlta)
 						{
-							menuModificar(listaDePasajeros, LEN, listaTipoPasajeros, 3);
+							if(menuModificar(listaDePasajeros, LEN, listaTipoPasajeros, 3))
+							{
+								printf("\nPasajero modificado exitosamente.\n\n");
+							}
 						}
 						else
 						{
-							printf("Para acceder al menu, primero debe ingresar un pasajero. ");
+							printf("\nPara acceder al menu, primero debe ingresar un pasajero.\n\n");
 						}
 					break;
 					case 3:
@@ -93,7 +98,7 @@ int main(void)
 						}
 						else
 						{
-							printf("Para acceder al menu, primero debe ingresar un pasajero. ");
+							printf("\nPara acceder al menu, primero debe ingresar un pasajero.\n\n");
 						}
 					break;
 					case 4:
@@ -103,18 +108,22 @@ int main(void)
 						}
 						else
 						{
-							printf("Para acceder al menu, primero debe ingresar un pasajero. ");
+							printf("\nPara acceder al menu, primero debe ingresar un pasajero.\n\n");
 						}
 
 					break;
 					case 5:
-						cargaForzada();
+						if(cargaForzada(listaDePasajeros, LEN, listaDeFlightCodes))
+						{
+							banderaAlta = 1;
+							printf("\nLa carga forzosa se realizo exitosamente.\n\n");
+						}
 					break;
 					case 6:
 						printf("\nGracias por usar nuestra app!");
 					break;
 					default:
-						printf("\nOPCION NO DISPONIBLE.\n");
+						printf("\nOPCION NO DISPONIBLE.\n\n");
 					break;
 				}
 			}

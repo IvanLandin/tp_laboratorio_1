@@ -85,7 +85,7 @@ int myGets(char* cadena, int len)
 	}
 	return retorno;
 }
-float utn_getNumeroDecimal(float* pResultado, char* mensaje, char* mensajeError, float limiteInferior, float limiteSuperior, int reintentos)
+int utn_getNumeroDecimal(float* pResultado, char* mensaje, char* mensajeError, float limiteInferior, float limiteSuperior, int reintentos)
 {
 	float bufferFloat;
 	int retorno;
@@ -136,19 +136,19 @@ int esDecimal(char* cadena)
 
 	i = 0;
 	retorno = 0;
-	banderaPunto = 1;
+	banderaPunto = 0;
 
 	if(cadena != NULL && strlen(cadena) > 0)
 	{
 		while(cadena[i] != '\0')
 		{
-			if((cadena[i] == '.' && banderaPunto == 1) || esNumerica(cadena))
+			if(isdigit(cadena[i]))
 			{
-				if(cadena[i] == '.')
-				{
-					banderaPunto = 0;
-				}
 				retorno = 1;
+			}
+			if(cadena[i] == '.' && banderaPunto == 0)
+			{
+				banderaPunto = 1;
 			}
 			i++;
 		}
@@ -194,18 +194,15 @@ int utn_getAlfaNumerico(char* pResultado, char mensaje[], char mensajeError[], i
 	printf(mensaje);
 	fflush(stdin);
 	retornoMyGets = myGets(bufferString, sizeof(bufferString));
-
 	len = strlen(bufferString);
 
-	for(int i=0; i<len; i++)
+	while(!getAlNum(bufferString, len) || (len < limiteInferior || len > limiteSuperior))
 	{
-		while(!isalnum(bufferString[i]))
-		{
-			printf("%s", mensajeError);
-			printf("%s", mensaje);
-			fflush(stdin);
-			retornoMyGets = myGets(bufferString, sizeof(bufferString));
-		}
+		printf("%s", mensajeError);
+		printf("%s", mensaje);
+		fflush(stdin);
+		retornoMyGets = myGets(bufferString, sizeof(bufferString));
+		len = strlen(bufferString);
 	}
 
 	if(retornoMyGets == 0 && len >= limiteInferior && len <= limiteSuperior)
@@ -228,16 +225,16 @@ int utn_getTexto(char* pResultado, char mensaje[], char mensajeError[], int limi
 	printf(mensaje);
 	fflush(stdin);
 	retornoMyGets = myGets(bufferString, sizeof(bufferString));
+	len = strlen(bufferString);
 
-	while(!getString(bufferString))
+	while(!getString(bufferString, len) || (len < limiteInferior || len > limiteSuperior))
 	{
 		printf("%s", mensajeError);
 		printf("%s", mensaje);
 		fflush(stdin);
 		retornoMyGets = myGets(bufferString, sizeof(bufferString));
+		len = strlen(bufferString);
 	}
-
-	len = strlen(bufferString);
 
 	if(retornoMyGets == 0 && len >= limiteInferior && len <= limiteSuperior)
 	{
@@ -248,21 +245,34 @@ int utn_getTexto(char* pResultado, char mensaje[], char mensajeError[], int limi
 	return retorno;
 }
 
-int getString(char* cadena)
+int getString(char* cadena, int len)
 {
-	int retorno;
-	int len;
-	int i;
-
-	retorno = 1;
+	int retorno = 1;
 
 	if(cadena!=NULL)
 	{
-		len = strlen(cadena);
-
-		for(i=0; i<len; i++)
+		for(int i=0; i<len; i++)
 		{
 			if(!isprint(cadena[i]) || ispunct(cadena[i]) || (!isalpha(cadena[i]) && cadena[i] != ' '))
+			{
+				retorno = 0;
+				break;
+			}
+		}
+	}
+
+	return retorno;
+}
+
+int getAlNum(char* cadena, int len)
+{
+	int retorno = 1;
+
+	if(cadena!=NULL)
+	{
+		for(int i=0; i<len; i++)
+		{
+			if(!isalnum(cadena[i]))
 			{
 				retorno = 0;
 				break;
